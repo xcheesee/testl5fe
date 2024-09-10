@@ -1,24 +1,30 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
 import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.js'
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+const episodeRoman = ["I", "II", "III", "IV", "V", "VI"]
 
-setupCounter(document.querySelector('#counter'))
+async function getFilms () {
+  const filmContainer = document.getElementById('list-container')
+  const spinner = document.createElement("span")
+  spinner.classList.add("loader")
+  filmContainer.appendChild(spinner)
+  const res = await fetch('http://localhost:8000/films')
+  const json = await res.json()
+  const films = json.results.map((film, i) => {
+    const ele = document.createElement('div')
+    ele.classList.add("movie")
+    ele.innerHTML = `
+    <a class="movie__title" href="/film?id=${i+1}">${film.title}</a>
+    <span class="movie__ep">Episode ${episodeRoman[film.episode_id - 1]}</span>
+    <span class="movie__release">${new Intl.DateTimeFormat('pt-BR').format( new Date(film.release_date) )}</span>
+    `
+    return ele
+  })
+  filmContainer.removeChild(spinner)
+  films.forEach((film) => {
+    filmContainer.appendChild(film)
+  })
+}
+
+getFilms()

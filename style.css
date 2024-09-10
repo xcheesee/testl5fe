@@ -1,3 +1,53 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+/*-----------------------------------------------------------------------------------------------------------------------*/
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -25,14 +75,10 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  position: relative;
 }
 
 #app {
@@ -42,45 +88,139 @@ h1 {
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vanilla:hover {
-  filter: drop-shadow(0 0 2em #f7df1eaa);
+.main-heading {
+  font-size: 60px;
+  font-weight: bold;
+  margin-inline: auto;
+  padding: 12px 0;
+  color: #e8ebee;
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.main-heading:link {
+  text-decoration: inherit;
+  color: inherit;
   cursor: pointer;
-  transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
+
+.main-heading:hover {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: pointer;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #FFF;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  margin-inline: auto;
 }
+
+#list-container, #film-container {
+  min-height: 320px;
+  display: grid;
+  align-items: center;
+  padding: 60px 0;
+}
+
+#list-container {
+  gap: 16px;
+}
+
+#film-container {
+  margin-inline: auto;
+  width: min(90%, 1200px);
+  gap: 36px;
+  height: 100%;
+}
+
+.film__crawl {
+  display: grid;
+  gap: 8px;
+  width: min(80%, 1000px);
+}
+
+.film__crawl--title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.movie {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  margin-inline: auto;
+  width: min(90%, 800px);
+  padding: 16px;
+  column-gap: 20px;
+  row-gap: 12px;
+}
+
+.movie:not(:last-child) {
+  border-bottom: #e8ebee 1px solid;
+}
+
+.movie__title {
+  font-weight: 600;
+  grid-column-start: 1;
+  grid-column-end: -1;
+  cursor: pointer;
+}
+
+.film__title {
+  display: grid;
+  grid-template-columns: max-content max-content 1fr;
+  row-gap: 8px;
+  column-gap: 16px;
+}
+
+.film__title--text {
+  font-weight: 600;
+  font-size: 64px;
+  grid-column-start: 1;
+  grid-column-end: -1;
+}
+
+.film__title--release {
+  color: aliceblue;
+}
+
+.film__people {
+  display: grid;
+  gap: 16px;
+}
+
+.film__people>* {
+  padding: 0 8px 8px 8px;
+}
+
+.film__people>*:not(:last-child) {
+  border-bottom: #e8ebee 1px solid;
+}
+
+.film__people--header {
+  font-weight: 600;
+}
+
+.cast--span>* {
+ padding-inline: 2px;
+}
+
+.cast--span>*:not(:last-child)::after {
+  content: " • "
+}
+
+@keyframes rotation {
+  0% {
+      transform: rotate(0deg);
+  }
+  100% {
+      transform: rotate(360deg);
+  }
+} 
 
 @media (prefers-color-scheme: light) {
   :root {
