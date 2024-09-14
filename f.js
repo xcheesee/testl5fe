@@ -1,5 +1,5 @@
 import "./style.css"
-import { episodeRoman, episodePoster, episodeBGPoster } from "./constants";
+import { episodeRoman, episodePoster, episodeBGPoster, episodeTrailer } from "./constants";
 import getFilm from "./api/getFilm";
 
 const searchParams = new URLSearchParams(window.location.search);
@@ -18,7 +18,18 @@ async function populateFilmDiv(id) {
 
     filmContainer.removeChild(spinner)
     filmContainer.innerHTML = createFilmDiv(filmData)
-    document.getElementById("video__button")?.addEventListener('click', () => console.log('pog'))
+    const videoBtn =  document.getElementById("video__button")
+    const videoContainer = document.getElementById("v-container")
+    const closeBtn = document.getElementById("c-btn")
+    const video = document.getElementById("vid")
+    videoBtn?.addEventListener('click', () => {
+      toggleVideoPlaybackPopup(videoContainer)
+    })
+    closeBtn?.addEventListener('click', () => {
+      const videoSrc = video.src;
+      video.src = videoSrc;
+      toggleVideoPlaybackPopup(videoContainer)
+    })
 }
 
 
@@ -41,7 +52,11 @@ function createFilmDiv(filmData) {
                     <span class="film__title--release">${new Intl.DateTimeFormat('pt-BR').format(new Date(filmData.release_date))}</span>
                   </div>
                 </div>
-                <div><button id="video__button">Assistir Trailer</button/></div>
+                  <button id="video__button">
+                    <div style="font-size:1rem;">Assistir Trailer</div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.14v14l11-7z"/></svg>
+                  </button/></div>
+                <div>
             </div>
         </div>
 
@@ -58,10 +73,15 @@ function createFilmDiv(filmData) {
           </div>
         </div>
 
-        <div class="video__container video__container-hidden">
+        <div id="v-container" class="video__container video__container-hidden">
+          <div style="justify-self:end;padding:4px 8px;display:flex;justify-content:center;">
+            <button class="close-btn" id="c-btn"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"/></svg>
+            </button>
+          </div>
           <iframe 
-            style="position:relative;width:100%;height:100%;" 
-            src="https://www.youtube.com/embed/vZ734NWnAHA?si=g4z38zdWYoYPcsQp" 
+            id="vid"
+            style="position:relative;width:80%;height:80%;" 
+            src="${episodeTrailer[filmData.episode_id - 1]}" 
             title="YouTube video player" 
             frameborder="0" 
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -72,6 +92,11 @@ function createFilmDiv(filmData) {
 
     return filmHTML
 
+}
+
+function toggleVideoPlaybackPopup(ele) {
+  ele.classList.toggle('video__container-hidden')
+  ele.classList.toggle('video__container-active')
 }
 
 populateFilmDiv(searchParams.get("id"));
