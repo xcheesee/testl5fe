@@ -1,7 +1,6 @@
 import './style.css'
-import { episodeRoman } from './constants.js'
+import { episodeRoman, episodePoster } from './constants.js'
 import getFilms from './api/getFilms.js'
-
 
 async function populateFilmsDiv() {
   const filmContainer = document.getElementById('list-container')
@@ -24,9 +23,15 @@ function createFilmDiv(film, index) {
   const ele = document.createElement('div')
   ele.classList.add("movie")
   ele.innerHTML = `
-    <a class="movie__title" href="/film?id=${index + 1}">${film.title}</a>
-    <span class="movie__ep">Episode ${episodeRoman[film.episode_id - 1]}</span>
-    <span class="movie__release">${new Intl.DateTimeFormat('pt-BR').format(new Date(film.release_date))}</span>
+    <div class="poster-container poster-container__list"><img class="poster" src="${episodePoster[film.episode_id - 1]}"></div>
+    <div class="movie__desc">
+      <a class="movie__title" href="/film?id=${index + 1}">${film.title}</a>
+      <div style="display:flex;gap:8px;padding:0 8px;">
+        <span class="movie__ep">Episode ${episodeRoman[film.episode_id - 1]}</span>
+        <span>•</span>
+        <span class="movie__release">${new Intl.DateTimeFormat('pt-BR').format(new Date(film.release_date))}</span>
+      </div>
+    </div>
   `
   return ele
 
