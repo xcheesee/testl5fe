@@ -18,7 +18,9 @@ async function populateFilmDiv(id) {
 
     filmContainer.removeChild(spinner)
     filmContainer.innerHTML = createFilmDiv(filmData)
+    document.getElementById("video__button")?.addEventListener('click', () => console.log('pog'))
 }
+
 
 function createFilmDiv(filmData) {
     const cast = document.createElement("div")
@@ -39,6 +41,7 @@ function createFilmDiv(filmData) {
                     <span class="film__title--release">${new Intl.DateTimeFormat('pt-BR').format(new Date(filmData.release_date))}</span>
                   </div>
                 </div>
+                <div><button id="video__button">Assistir Trailer</button/></div>
             </div>
         </div>
 
@@ -55,7 +58,7 @@ function createFilmDiv(filmData) {
           </div>
         </div>
 
-        <div class="video__container">
+        <div class="video__container video__container-hidden">
           <iframe 
             style="position:relative;width:100%;height:100%;" 
             src="https://www.youtube.com/embed/vZ734NWnAHA?si=g4z38zdWYoYPcsQp" 
@@ -65,6 +68,7 @@ function createFilmDiv(filmData) {
             referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
     `
+
 
     return filmHTML
 
