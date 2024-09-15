@@ -34,7 +34,6 @@ function createFilmDiv(film, index) {
     </div>
   `
   return ele
-
 }
 
 populateFilmsDiv()
