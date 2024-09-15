@@ -398,6 +398,37 @@ body {
   background: #242424;
 }
 
+#comment__container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.comment__title {
+  font-size: 3rem;
+  font-weight: 600;
+}
+
+.comment__text {
+  border: #ffffff 1px solid;
+  border-radius: 5px;
+  padding: 12px 8px;
+  background: #3d3d3d;
+  display: grid;
+  gap: 8px;
+}
+
+.comment__text-user {
+  font-size: 0.75rem;
+}
+
+.comment__text-container {
+  display: grid;
+  gap: 8px;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);

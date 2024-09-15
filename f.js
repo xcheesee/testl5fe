@@ -1,13 +1,20 @@
 import "./style.css"
-import { episodeRoman, episodePoster, episodeBGPoster, episodeTrailer } from "./constants";
+import { episodeRoman, episodePoster, episodeBGPoster, episodeTrailer, starWarsCharacters } from "./constants";
 import getFilm from "./api/getFilm";
+import getCommentByFilmId from "./api/getCommentByFilmId";
+import postComment from "./api/postComment";
+import Srand from 'seeded-rand'
 
 const searchParams = new URLSearchParams(window.location.search);
 const filmContainer = document.getElementById("film-container");
+const commentContainer = document.getElementById("comment__container")
 
 if(!searchParams.get("id")) {
     window.location.replace("/")
 }
+
+const rnd = new Srand(+searchParams.get("id")+432489231921+(+searchParams.get("id")));
+const state = rnd.getState();
 
 async function populateFilmDiv(id) {
     const spinner = document.createElement("span")
@@ -30,6 +37,29 @@ async function populateFilmDiv(id) {
       video.src = videoSrc;
       toggleVideoPlaybackPopup(videoContainer)
     })
+}
+
+async function populateCommentDiv(id) {
+    const spinner = document.createElement("span")
+    spinner.classList.add("loader")
+    commentContainer.appendChild(spinner)
+
+    const commentData = await getCommentByFilmId(id)
+
+    commentContainer.removeChild(spinner)
+    commentContainer.innerHTML = createCommentDiv(commentData)
+    const sendBtn = document.getElementById("send-comment")
+    sendBtn.addEventListener('click', () => sendComment(id))
+
+}
+
+async function sendComment (filmId) {
+  const comment = document.getElementById('comment-val')
+  const res = await postComment({comment: comment.value, filmId})
+  if(!res.ok) {
+    throw new Error("Error Post")
+  }
+  populateCommentDiv(filmId);
 }
 
 
@@ -94,9 +124,38 @@ function createFilmDiv(filmData) {
 
 }
 
+function createCommentDiv(commentData) {
+  let comentarios;
+  rnd.setState(state)
+  if(!commentData || commentData.length == 0) {
+    comentarios = "<div>Nenhum Comentario</div>"
+  } else {
+  comentarios = commentData?.reduce((curr, comment) => ( curr + `
+      <div class="comment__text-container">
+        <div class="comment__text">
+          <div class="comment__text-user"><span style="font-weight:600;">${starWarsCharacters[rnd.intInRange(1, 58)]}</span> disse:</div>
+          <p>${comment.comment}</p>
+        </div>
+      </div>
+    `), "")
+  }
+  const commentHTML = `
+    <div class="comment__title">Comentarios</div>
+    ${comentarios}
+    <div style="display:grid;gap:8px;">
+      <div>Escrever Comentario:</div>
+      <textarea id="comment-val" style="width:100%;resize:none;"></textarea>
+      <button id="send-comment" style="width: 100%;">Enviar</button>
+    </div>
+  `
+
+  return commentHTML
+}
+
 function toggleVideoPlaybackPopup(ele) {
   ele.classList.toggle('video__container-hidden')
   ele.classList.toggle('video__container-active')
 }
 
 populateFilmDiv(searchParams.get("id"));
+populateCommentDiv(searchParams.get("id"))
